@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:m="clr-namespace:VolunteerHub.Models"
+			 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VolunteerHub.Views.Controls.ProjectTile">
+		<UserControl.DataContext>
+			<m:Project/>
+		</UserControl.DataContext>
+		<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RowDefinitions="Auto,Auto,*,Auto">
+			<TextBlock Grid.Row="0"  
+					   HorizontalAlignment="Center"
+					   FontSize="27"
+					   Text="{Binding ProjectName, FallbackValue=Выбери нужный проект в меню слева}"/>
+			
+			<TextBlock Grid.Row="1" 
+					   Text="{Binding Description}"
+					   HorizontalAlignment="Center"
+					   FontSize="13.5"
+					   Opacity="0.6" />
+			<StackPanel Grid.Row="2" HorizontalAlignment="Center">
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<StackPanel Spacing="5" Orientation="Horizontal">
+						<TextBlock Grid.Row="2" Text="Начало:"/>
+						<TextBlock Grid.Row="2" Text="{Binding StartDate}"/>
+					</StackPanel>
+					<StackPanel Spacing="5" Orientation="Horizontal">
+						<TextBlock Grid.Row="2" Text="Окончание:"/>
+						<TextBlock Grid.Row="2" Text="{Binding EndDate}"/>
+					</StackPanel>
+				</StackPanel>
+				<TextBlock HorizontalAlignment="Center" Grid.Row="2" Text="{Binding Status}"/>
+			</StackPanel>
+			<Button x:Name="Unregister" IsVisible="False" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,30"  Click="ButtonUnreg_Click">Отписаться</Button>
+
+			<Button x:Name="Register" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,30"  Click="Button_Click">Записаться</Button>
+		</Grid>
+</UserControl>

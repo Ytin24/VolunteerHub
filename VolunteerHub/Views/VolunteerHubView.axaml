@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctrls="clr-namespace:VolunteerHub.Views.Controls"
+			 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VolunteerHub.Views.VolunteerHubView">
+	<SplitView IsPaneOpen="{Binding #Menu.IsPointerOver} "
+           DisplayMode="CompactInline">
+		<SplitView.Pane>
+
+			<ScrollViewer>
+				<ListBox x:Name="Menu" ItemsSource="{Binding Projects}"  >
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ProjectName}" TextTrimming="CharacterEllipsis"/>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
+		</SplitView.Pane>
+		<SplitView.Content>
+			<ctrls:ProjectTile IsVisible="{Binding #Menu.SelectedItem, Converter={StaticResource ProjectIsNullConverter}}" DataContext="{Binding #Menu.SelectedItem }" ></ctrls:ProjectTile>
+		</SplitView.Content>
+	</SplitView>
+</UserControl>

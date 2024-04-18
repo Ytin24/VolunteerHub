@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:converters="clr-namespace:VolunteerHub.Models.Converters"
+             
+			 x:Class="VolunteerHub.App"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+		<materialIcons:MaterialIconStyles/>
+    </Application.Styles>
+	<Application.Resources>
+		
+		<converters:ProjectIsNullConverter x:Key="ProjectIsNullConverter"/>
+		
+	</Application.Resources>
+</Application>

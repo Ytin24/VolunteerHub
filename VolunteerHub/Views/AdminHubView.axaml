@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:ctrls="clr-namespace:VolunteerHub.Views.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VolunteerHub.Views.AdminHubView">
+	<SplitView IsPaneOpen="{Binding #Menu.IsPointerOver} "
+           DisplayMode="CompactInline">
+		<SplitView.Pane>
+			<ScrollViewer>
+				<ListBox x:Name="Menu" SelectedItem="{Binding SelectedAProject}" ItemsSource="{Binding Projects}" >
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel>
+								<TextBlock Text="{Binding Project.ProjectName}" TextTrimming="CharacterEllipsis"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</ScrollViewer>
+		</SplitView.Pane>
+		<SplitView.Content>
+			<Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="1*,1*">
+				<ctrls:ProjectTile Grid.ColumnSpan="2" Grid.Row ="0" IsVisible="{Binding #Menu.SelectedItem, Converter={StaticResource ProjectIsNullConverter}}" DataContext="{Binding #Menu.SelectedItem}" ></ctrls:ProjectTile>
+				<ListBox Name="UserList" SelectedItem="{Binding SelectedUser}" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding #Menu.SelectedItem.Users}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+								<TextBlock Text="{Binding Username}"/>
+								<TextBlock Text="{Binding Email}"/>
+							</StackPanel>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+				<StackPanel Grid.Row="2" Orientation="Horizontal">
+					<Button Command="{Binding AddVolunteer}" IsVisible="False"> 
+						Добавить волонтера
+					</Button>
+					<Button Command="{Binding RemoveVolunteer}" 
+							IsVisible="{Binding #UserList.SelectedUser, Converter={StaticResource ProjectIsNullConverter}}"
+							Content="Удалить волонтера"/>
+				</StackPanel>
+				
+			</Grid>
+		</SplitView.Content>
+	</SplitView>
+
+</UserControl>

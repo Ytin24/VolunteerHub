@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:vm="clr-namespace:VolunteerHub.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VolunteerHub.Views.AuthView"
+             x:DataType="vm:AuthViewModel"
+			 >
+	<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10" MinWidth="400" >
+		<TextBox Text="{Binding Login}" Watermark="Логин"/>
+		<Grid Classes="PasswordBoxContainer" ColumnDefinitions="*,Auto">
+			<TextBox Text="{Binding Password}" PasswordChar="*" VerticalContentAlignment="Center" Watermark="Пароль"
+					 HorizontalAlignment="Stretch"
+					 RevealPassword="{Binding #ViewPassword.IsPressed, Mode=OneWay}"/>
+			
+			<Button Name="ViewPassword" Classes="ViewPasswordEye" Padding="10" Margin="5,0,0,0" Grid.Column="1">
+				<materialIcons:MaterialIcon/>
+			</Button>
+		</Grid>
+		<Button Command="{Binding LoginAccount}" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">Войти</Button>
+	</StackPanel>
+	<UserControl.Styles>
+		<Style Selector="Button.ViewPasswordEye:pressed materialIcons|MaterialIcon">
+			<Setter Property="Kind" Value="EyeOutline"/>
+		</Style>
+		<Style Selector="Button.ViewPasswordEye:not(:pressed) materialIcons|MaterialIcon">
+			<Setter Property="Kind" Value="EyeOffOutline"/>
+		</Style>
+	</UserControl.Styles>
+</UserControl>
