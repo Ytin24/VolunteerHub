@@ -11,6 +11,7 @@ using VolunteerHub.Models;
 using VolunteerHub.Db;
 using System.Linq;
 using VolunteerHub.Views;
+using VolunteerHub.Models.Services;
 
 namespace VolunteerHub.ViewModels;
 
@@ -18,23 +19,26 @@ public class AuthViewModel : ViewModelBase {
     IClassicDesktopStyleApplicationLifetime _desktop = (IClassicDesktopStyleApplicationLifetime)App.Current.ApplicationLifetime;
     private VolunteerDbContext db = new VolunteerDbContext();
 
-    public static User Me { get; set; }
     public string Login { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public ReactiveCommand<Unit, Unit> LoginAccount { get; set; }
-    public AuthViewModel(IScreen screen) : base(screen) {
+    public UserService _userService { get; private set; }
+    public AuthViewModel(IScreen screen, UserService us,
+        AdminHubViewModel admin,
+        VolunteerHubViewModel volunteer) : base(screen) {
+        _userService = us;
         LoginAccount = ReactiveCommand.Create(() => {
             var user = db.Users.FirstOrDefault(x => x.Email == Login && x.PasswordHash == Password);
             if(user == null) {
                 return;
             }
-            Me = user;
-            if(Me.RoleId == 1) {
-                this.HostScreen.Router.NavigateAndReset.Execute(new AdminHubViewModel(this));
+            _userService.SetUpUser(user);
+            if(_userService.GetUser().RoleId == 1) {
+                this.HostScreen.Router.NavigateAndReset.Execute(admin);
 
             }
             else {
-                this.HostScreen.Router.NavigateAndReset.Execute(new VolunteerHubViewModel(this));
+                this.HostScreen.Router.NavigateAndReset.Execute(volunteer);
             }
         });
     }

@@ -31,7 +31,11 @@
 						<TextBlock Grid.Row="2" Text="{Binding EndDate}"/>
 					</StackPanel>
 				</StackPanel>
-				<TextBlock HorizontalAlignment="Center" Grid.Row="2" Text="{Binding Status}"/>
+				<StackPanel HorizontalAlignment="Center" Grid.Row="2" Spacing="5" Orientation="Horizontal">
+					<TextBlock Grid.Row="2" Text="Статус:"/>
+					<TextBlock Text="{Binding Status}"/>
+
+				</StackPanel>
 			</StackPanel>
 			<Button x:Name="Unregister" IsVisible="False" Grid.Row="4" HorizontalAlignment="Center" Margin="0,0,0,30"  Click="ButtonUnreg_Click">Отписаться</Button>
 

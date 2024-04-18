@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace VolunteerHub.Models;
@@ -25,13 +26,9 @@ public partial class Project {
         get
         {
             var a = Statuses.LastOrDefault();
-            if (a is null) return "Статус неизвестен";
+            if (a is null) return "неизвестен";
             else return a.StatusName;
         }
 
     }
-}
-public class AdminProject {
-   public Project Project { get; set; }
-    public List<User> Users { get; set; }
 }

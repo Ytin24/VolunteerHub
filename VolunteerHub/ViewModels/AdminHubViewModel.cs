@@ -4,50 +4,145 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VolunteerHub.Db;
 using VolunteerHub.Models;
+using VolunteerHub.Models.Services;
 using VolunteerHub.Views.Controls;
 
 namespace VolunteerHub.ViewModels
 {
     public class AdminHubViewModel : ViewModelBase
     {
-        private VolunteerDbContext db = new VolunteerDbContext();
-        public AdminHubViewModel(IRoutableViewModel Caller) : base(Caller.HostScreen) {
-            UpdateData();
-            RemoveVolunteer = ReactiveCommand.Create(() => {
-                var projectParticipations = db.ProjectParticipations.ToList();
-                var target = projectParticipations.FirstOrDefault(x => x.ProjectId == SelectedAProject?.Project?.ProjectId && x.UserId == SelectedUser?.UserId);
+        private readonly VolunteerDbContext _db = new();
+        public UserService _userService { get; set; }
+
+        public AdminHubViewModel(IScreen screen, UserService us) : base(screen)
+        {
+            _userService = us;
+            LoadProjects();
+
+            // Подписываемся на изменение выбранного проекта
+            this.WhenAnyValue(x => x.SelectedProject)
+                .Subscribe(_ => LoadUsersForSelectedProject());
+
+            // Подписываемся на изменение выбранного статуса
+            this.WhenAnyValue(x => x.SelectedStatus)
+                .Where(status => status != null)
+                .Subscribe(_ => UpdateProjectStatus.Execute().Subscribe());
+
+            RemoveVolunteer = ReactiveCommand.Create(() =>
+            {
+                var target = SelectedProject?.ProjectParticipations.FirstOrDefault(x => x.UserId == SelectedUser?.UserId);
                 if (target == null) return;
-                db.ProjectParticipations.Remove(target);
-                db.SaveChanges();
-                UpdateData();
+                Users.Remove(SelectedUser);
+                _db.ProjectParticipations.Remove(target);
+                _db.SaveChanges();
             });
-            SelectedAProject.WhenAnyValue(x => x)
-            .Subscribe(_ => UpdateData());
+
+            UpdateProjectStatus = ReactiveCommand.CreateFromTask(async () =>
+            {
+                if (SelectedProject == null || SelectedStatus == null) return;
+
+                // Получаем экземпляр проекта из базы данных
+                var project = await _db.Projects.FindAsync(SelectedProject.ProjectId);
+                if (project == null) return; 
+                project.Statuses.Add(SelectedStatus);
+
+                await _db.SaveChangesAsync();
+                var lstproj = SelectedProject;
+                SelectedProject = null;
+                SelectedProject = Projects.First(x=>x==lstproj);
+                
+            });
+
+            OpenCloseMenuPane = ReactiveCommand.Create(
+                () =>
+                { this.IsModePaneOpen = !this.IsModePaneOpen; });
+
+            var statuses = _db.ProjectStatuses.ToList();
+            Statuses = new ObservableCollection<ProjectStatus>(statuses);
         }
 
-        private void UpdateData() {
-            Projects.Clear();
-            var projects = db.Projects.Include(p => p.ProjectParticipations).ToList();
-            var users = db.Users.ToList();
-            foreach (var project in projects) {
-                var projectUsers = project.ProjectParticipations.Select(pp => pp.User).ToList();
-                Projects.Add(new AdminProject {
-                    Project = project,
-                    Users = users.Where(u => projectUsers.Any(pu => pu.UserId == u.UserId)).ToList()
-                });
+        private void LoadProjects()
+        {
+            var projects = _db.Projects.Include(p => p.ProjectParticipations).ThenInclude(pp => pp.User).Include(s=>s.Statuses).ToList();
+            Projects = new ObservableCollection<Project>(projects);
+
+        }
+
+        private void LoadUsersForSelectedProject()
+        {
+            Users.Clear();
+            if (SelectedProject != null)
+            {
+                foreach (var participation in SelectedProject.ProjectParticipations)
+                {
+                    Users.Add(participation.User);
+                }
             }
         }
 
-        public List<AdminProject> Projects { get; set; } = new List<AdminProject>();
-        public AdminProject SelectedAProject { get; set; } = new();
-        public User SelectedUser { get; set; }
-        public ReactiveCommand<Unit, Unit> RemoveVolunteer { get; set; }
+        public ObservableCollection<Project> Projects { get; private set; } = new();
+        public ObservableCollection<User> Users { get; private set; } = new();
+
+        public ObservableCollection<ProjectStatus> Statuses { get; private set; } = new();
+
+        private Project _selectedProject;
+
+        public Project SelectedProject
+        {
+            get { return _selectedProject; }
+            set
+            {
+                _selectedProject = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private User _selectedUser;
+        public User SelectedUser
+        {
+            get => _selectedUser;
+            set
+            {
+                _selectedUser = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        private ProjectStatus _selectedStatus;
+
+        public ProjectStatus SelectedStatus
+        {
+            get { return _selectedStatus; }
+            set
+            {
+                _selectedStatus = value;
+                this.RaisePropertyChanged();
+            }
+        }
+
+        public ReactiveCommand<Unit, Unit> RemoveVolunteer { get; }
+        public ReactiveCommand<Unit, Unit> UpdateProjectStatus { get; }
+        public ReactiveCommand<Unit, Unit> OpenCloseMenuPane { get; }
+
+        private bool _isModePaneOpen;
+
+        public bool IsModePaneOpen
+        {
+            get { return _isModePaneOpen; }
+            set
+            {
+                _isModePaneOpen = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
     }
 }
