@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace VolunteerHub.ViewModels {
 
         public VolunteerHubViewModel(IScreen screen, UserService us) : base(screen) {
             _userService = us;
-            Projects = new VolunteerDbContext().Projects.ToList();
+            Projects = new VolunteerDbContext().Projects.Include(s=>s.Statuses).ToList();
         }
         public List<Project> Projects { get; set; }
 

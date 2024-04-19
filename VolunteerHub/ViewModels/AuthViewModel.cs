@@ -12,6 +12,7 @@ using VolunteerHub.Db;
 using System.Linq;
 using VolunteerHub.Views;
 using VolunteerHub.Models.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace VolunteerHub.ViewModels;
 
@@ -28,12 +29,12 @@ public class AuthViewModel : ViewModelBase {
         VolunteerHubViewModel volunteer) : base(screen) {
         _userService = us;
         LoginAccount = ReactiveCommand.Create(() => {
-            var user = db.Users.FirstOrDefault(x => x.Email == Login && x.PasswordHash == Password);
+            var user = db.Users.Include(x=>x.Role).FirstOrDefault(x => x.Email == Login && x.PasswordHash == Password);
             if(user == null) {
                 return;
             }
             _userService.SetUpUser(user);
-            if(_userService.GetUser().RoleId == 1) {
+            if(_userService.GetUser().Role.RoleName == "admin") {
                 this.HostScreen.Router.NavigateAndReset.Execute(admin);
 
             }

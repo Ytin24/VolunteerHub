@@ -8,6 +8,7 @@
         x:Class="VolunteerHub.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         Title="VolunteerHub"
+		
 		ClosingBehavior="OwnerAndChildWindows">
         <views:MainView />
 </Window>

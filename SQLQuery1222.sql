@@ -12,9 +12,6 @@ CREATE TABLE UserRoles (
     role_name NVARCHAR(50) NOT NULL
 );
 
--- Добавление ролей пользователей
-INSERT INTO UserRoles (role_name) VALUES ('admin'), ('volunteer');
-
 -- Создание таблицы "Пользователи"
 CREATE TABLE Users (
     user_id INT PRIMARY KEY IDENTITY,
@@ -40,8 +37,6 @@ CREATE TABLE ProjectStatus (
     status_name NVARCHAR(50) NOT NULL
 );
 
--- Добавление статусов проектов
-INSERT INTO ProjectStatus (status_name) VALUES ('active'), ('completed'), ('cancelled');
 
 -- Создание таблицы "Проекты и их статусы"
 CREATE TABLE ProjectProjectStatus (

@@ -31,37 +31,46 @@
 		</SplitView.Pane>
 		<SplitView IsPaneOpen="{Binding #Menu.IsPointerOver}" OpenPaneLength="300" DisplayMode="CompactInline">
 			<SplitView.Pane>
-				<ScrollViewer>
-					<ListBox x:Name="Menu" SelectedItem="{Binding SelectedProject}" ItemsSource="{Binding Projects}">
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<TextBlock Text="{Binding ProjectName}" TextTrimming="CharacterEllipsis"/>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
-				</ScrollViewer>
+					<ScrollViewer>
+
+						<ListBox x:Name="Menu" SelectedItem="{Binding SelectedProject}" ItemsSource="{Binding Projects}">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding ProjectName}" TextTrimming="CharacterEllipsis"/>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</ScrollViewer>
+				
 			</SplitView.Pane>
 			<SplitView.Content>
-				<Grid RowDefinitions="*,Auto,Auto" ColumnDefinitions="1*,1*">
+				<Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="1*,1*">
 					<!-- Кнопка для открытия/закрытия меню -->
 					<Button Command="{Binding OpenCloseMenuPane}" Padding="0" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="0" Grid.ColumnSpan="2">
 						<materialIcons:MaterialIcon Kind="Settings"/>
 					</Button>
 
 					<!-- Виджет для отображения выбранного проекта -->
-					<ctrls:ProjectTile DataContext="{Binding SelectedProject}" IsVisible="{Binding SelectedProject, Converter={StaticResource ProjectIsNullConverter}, FallbackValue=false}" Grid.ColumnSpan="2" Grid.Row="0"/>
+					<ctrls:ProjectTile  DataContext="{Binding SelectedProject}" IsVisible="{Binding SelectedProject, Converter={StaticResource ProjectIsNullConverter}, FallbackValue=false}" Grid.ColumnSpan="2" Grid.Row="0"/>
+					
+					<Panel  Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center"  IsVisible= "{Binding SelectedProject, Converter={StaticResource ProjectIsNullConverter}}" >
+						<TextBlock HorizontalAlignment="Center">Пользователи: </TextBlock>
+						<ScrollViewer Margin="0,30,0,30" >
+							<ListBox Background="Transparent" Name="UserList" SelectedItem="{Binding SelectedUser}" ItemsSource="{Binding Users}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+											<TextBlock Text="{Binding Username}"/>
+											<TextBlock Text="{Binding Email}"/>
+										</StackPanel>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</ScrollViewer>
+					</Panel>
 
 					<!-- Список пользователей для выбранного проекта -->
-					<ListBox Name="UserList" SelectedItem="{Binding SelectedUser}" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Users}">
-						<ListBox.ItemTemplate>
-							<DataTemplate>
-								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
-									<TextBlock Text="{Binding Username}"/>
-									<TextBlock Text="{Binding Email}"/>
-								</StackPanel>
-							</DataTemplate>
-						</ListBox.ItemTemplate>
-					</ListBox>
+					
 
 					<!-- Кнопка для удаления волонтера -->
 					<StackPanel Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Orientation="Horizontal">
@@ -72,7 +81,7 @@
 					</StackPanel>
 
 					<!-- ComboBox для выбора статуса проекта -->
-					<ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus}" IsVisible="{Binding SelectedProject, Converter={StaticResource ProjectIsNullConverter}}">
+					<ComboBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus}" IsVisible="{Binding SelectedProject, Converter={StaticResource ProjectIsNullConverter}}">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding StatusName}"/>
