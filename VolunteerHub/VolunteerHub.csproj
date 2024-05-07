@@ -10,6 +10,18 @@
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
+  
+  <ItemGroup>
+    <AvaloniaXaml Remove="DI\**" />
+    <AvaloniaXaml Remove="Models\Interfaces\**" />
+    <Compile Remove="DI\**" />
+    <Compile Remove="Models\Interfaces\**" />
+    <EmbeddedResource Remove="DI\**" />
+    <EmbeddedResource Remove="Models\Interfaces\**" />
+    <None Remove="DI\**" />
+    <None Remove="Models\Interfaces\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.0-beta1" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0-beta1" />
@@ -25,10 +37,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.17" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Interfaces\" />
-    <Folder Include="DI\" />
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>
