@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Layout;
 using DynamicData.Aggregation;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -20,11 +22,13 @@ namespace VolunteerHub.ViewModels
     public class AdminHubViewModel : ViewModelBase
     {
         private readonly VolunteerDbContext _db = new();
+        private readonly IProjectWindowService _windowProvider;
         public UserService _userService { get; set; }
 
-        public AdminHubViewModel(IScreen screen, UserService us) : base(screen)
+        public AdminHubViewModel(IScreen screen, UserService us, IProjectWindowService windowProvider) : base(screen)
         {
             _userService = us;
+            _windowProvider = windowProvider;
             LoadProjects();
 
             // Подписываемся на изменение выбранного проекта
@@ -65,6 +69,29 @@ namespace VolunteerHub.ViewModels
                 () =>
                 { this.IsModePaneOpen = !this.IsModePaneOpen; });
 
+            AddNewProject = ReactiveCommand.CreateFromTask(async () => {
+                var observableProject = _windowProvider.OpenProjectWindow().Subscribe(
+                    onNext: project => {
+                        try {
+                            _db.Projects.Add(project);
+                            _db.SaveChanges();
+                            LoadProjects();
+                        }
+                        catch (DbUpdateException ex) {
+                            _db.Projects.Remove(project);
+                        }
+                        catch (Exception ex) {
+                            Console.WriteLine($"Ошибка: {ex.Message}");
+                        }
+                    },
+                    onError: ex => {
+                        Console.WriteLine($"Ошибка: {ex.Message}");
+                    },
+                    onCompleted: () => {
+                        Console.WriteLine("Создание проекта завершено");
+                    });
+            });
+
             var statuses = _db.ProjectStatuses.ToList();
             Statuses = new ObservableCollection<ProjectStatus>(statuses);
         }
@@ -73,7 +100,7 @@ namespace VolunteerHub.ViewModels
         {
             var projects = _db.Projects.Include(p => p.ProjectParticipations).ThenInclude(pp => pp.User).Include(s=>s.Statuses).ToList();
             Projects = new ObservableCollection<Project>(projects);
-
+            this.RaisePropertyChanged(nameof(Projects));
         }
 
         private void LoadUsersForSelectedProject()
@@ -86,6 +113,7 @@ namespace VolunteerHub.ViewModels
                     Users.Add(participation.User);
                 }
             }
+            this.RaisePropertyChanged(nameof(Users));
         }
 
         public ObservableCollection<Project> Projects { get; private set; } = new();
@@ -131,6 +159,8 @@ namespace VolunteerHub.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveVolunteer { get; }
         public ReactiveCommand<Unit, Unit> UpdateProjectStatus { get; }
         public ReactiveCommand<Unit, Unit> OpenCloseMenuPane { get; }
+        public ReactiveCommand<Unit, Unit> AddNewProject { get; }
+
 
         private bool _isModePaneOpen;
 

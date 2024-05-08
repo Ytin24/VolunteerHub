@@ -13,8 +13,12 @@ public static class Bootstrapper
         services.RegisterLazySingleton<UserService>(() => new UserService());
         services.RegisterLazySingleton<RoutingState>(() => new RoutingState());
         services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
+        services.RegisterLazySingleton<IProjectWindowService>(() => new ProjectWindowService(
+           resolver.GetRequiredService<IMainWindowProvider>()
+           ));
         RegisterCommonViewModels(services, resolver);
         RegisterConst(services, resolver);
+
     }
     private static void RegisterConst(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
@@ -30,12 +34,14 @@ public static class Bootstrapper
             resolver.GetRequiredService<AdminHubViewModel>(),
             resolver.GetRequiredService<VolunteerHubViewModel>()
             ));
+       
     }
     private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
         services.RegisterLazySingleton(() => new AdminHubViewModel(
             resolver.GetRequiredService<IScreen>(),
-            resolver.GetRequiredService<UserService>()
+            resolver.GetRequiredService<UserService>(),
+            resolver.GetRequiredService<IProjectWindowService>()
             ));
         services.RegisterLazySingleton(() => new VolunteerHubViewModel(
             resolver.GetRequiredService<IScreen>(),
@@ -44,5 +50,4 @@ public static class Bootstrapper
         
        
     }
-
 }

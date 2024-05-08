@@ -10,16 +10,23 @@
 			<m:Project/>
 		</UserControl.DataContext>
 		<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" RowDefinitions="Auto,Auto,*,Auto">
-			<TextBlock Grid.Row="0"  
+			<TextBlock Grid.Row="0"
 					   HorizontalAlignment="Center"
 					   FontSize="27"
-					   Text="{Binding ProjectName, FallbackValue=Выбери нужный проект в меню слева}"/>
-			
-			<TextBlock Grid.Row="1" 
+					   Text="{Binding ProjectName, FallbackValue=Выбери нужный проект в меню слева}"
+					   TextWrapping="WrapWithOverflow"
+					   />
+			<ScrollViewer Grid.Row="1" MaxHeight="200">
+
+				<TextBlock
 					   Text="{Binding Description}"
+					   TextWrapping="WrapWithOverflow"
 					   HorizontalAlignment="Center"
 					   FontSize="13.5"
-					   Opacity="0.6" />
+					   Opacity="0.6"
+					   />
+			</ScrollViewer>
+
 			<StackPanel Grid.Row="2" HorizontalAlignment="Center">
 				<StackPanel Orientation="Horizontal" Spacing="10">
 					<StackPanel Spacing="5" Orientation="Horizontal">

@@ -29,10 +29,10 @@
 				</ScrollViewer>
 			</Border>
 		</SplitView.Pane>
-		<SplitView IsPaneOpen="{Binding #Menu.IsPointerOver}" OpenPaneLength="300" DisplayMode="CompactInline">
+		<SplitView IsPaneOpen="{Binding #GridMenu.IsPointerOver}" OpenPaneLength="300" DisplayMode="CompactInline">
 			<SplitView.Pane>
+				<Grid RowDefinitions="*,Auto" x:Name="GridMenu">
 					<ScrollViewer>
-
 						<ListBox x:Name="Menu" SelectedItem="{Binding SelectedProject}" ItemsSource="{Binding Projects}">
 							<ListBox.ItemTemplate>
 								<DataTemplate>
@@ -41,6 +41,13 @@
 							</ListBox.ItemTemplate>
 						</ListBox>
 					</ScrollViewer>
+					<Button Grid.Row="1"  HorizontalAlignment="Stretch" Command="{Binding AddNewProject}">
+						<TextBlock TextAlignment="Center" TextTrimming="CharacterEllipsis">
+							Добавить проект
+						</TextBlock>
+					</Button>
+				</Grid>
+					
 				
 			</SplitView.Pane>
 			<SplitView.Content>
