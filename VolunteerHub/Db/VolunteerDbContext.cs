@@ -1,20 +1,15 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using VolunteerHub.Models;
-using System.Configuration;
 
 namespace VolunteerHub.Db;
 
-public partial class VolunteerDbContext : DbContext
-{
-    public VolunteerDbContext()
-    {
+public partial class VolunteerDbContext : DbContext {
+    public VolunteerDbContext() {
     }
 
     public VolunteerDbContext(DbContextOptions<VolunteerDbContext> options)
-        : base(options)
-    {
+        : base(options) {
     }
 
     public virtual DbSet<Project> Projects { get; set; }
@@ -35,10 +30,8 @@ public partial class VolunteerDbContext : DbContext
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer(new ConnectionStringProvider().GerMssqlConnectionString());
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Project>(entity =>
-        {
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<Project>(entity => {
             entity.HasKey(e => e.ProjectId).HasName("PK__Projects__BC799E1F3E6DEB12");
 
             entity.Property(e => e.ProjectId).HasColumnName("project_id");
@@ -64,8 +57,7 @@ public partial class VolunteerDbContext : DbContext
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
                         .HasConstraintName("FK__ProjectPr__proje__412EB0B6"),
-                    j =>
-                    {
+                    j => {
                         j.HasKey("ProjectId", "StatusId").HasName("PK__ProjectP__BF11A54C1FE31384");
                         j.ToTable("ProjectProjectStatus");
                         j.IndexerProperty<int>("ProjectId").HasColumnName("project_id");
@@ -73,8 +65,7 @@ public partial class VolunteerDbContext : DbContext
                     });
         });
 
-        modelBuilder.Entity<ProjectParticipation>(entity =>
-        {
+        modelBuilder.Entity<ProjectParticipation>(entity => {
             entity.HasKey(e => e.ParticipationId).HasName("PK__ProjectP__908F434B131C34AB");
 
             entity.ToTable("ProjectParticipation");
@@ -97,8 +88,7 @@ public partial class VolunteerDbContext : DbContext
                 .HasConstraintName("FK__ProjectPa__user___49C3F6B7");
         });
 
-        modelBuilder.Entity<ProjectStatus>(entity =>
-        {
+        modelBuilder.Entity<ProjectStatus>(entity => {
             entity.HasKey(e => e.StatusId).HasName("PK__ProjectS__3683B53189EAFEA0");
 
             entity.ToTable("ProjectStatus");
@@ -109,8 +99,7 @@ public partial class VolunteerDbContext : DbContext
                 .HasColumnName("status_name");
         });
 
-        modelBuilder.Entity<Report>(entity =>
-        {
+        modelBuilder.Entity<Report>(entity => {
             entity.HasKey(e => e.ReportId).HasName("PK__Reports__779B7C5897E7D4F9");
 
             entity.Property(e => e.ReportId).HasColumnName("report_id");
@@ -135,8 +124,7 @@ public partial class VolunteerDbContext : DbContext
                 .HasConstraintName("FK__Reports__user_id__4E88ABD4");
         });
 
-        modelBuilder.Entity<Task>(entity =>
-        {
+        modelBuilder.Entity<Task>(entity => {
             entity.HasKey(e => e.TaskId).HasName("PK__Tasks__0492148DE9CBF5A7");
 
             entity.Property(e => e.TaskId).HasColumnName("task_id");
@@ -161,8 +149,7 @@ public partial class VolunteerDbContext : DbContext
                 .HasConstraintName("FK__Tasks__project_i__45F365D3");
         });
 
-        modelBuilder.Entity<User>(entity =>
-        {
+        modelBuilder.Entity<User>(entity => {
             entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FBB642BE2");
 
             entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164079C299D").IsUnique();
@@ -185,8 +172,7 @@ public partial class VolunteerDbContext : DbContext
                 .HasConstraintName("FK__Users__role_id__3A81B327");
         });
 
-        modelBuilder.Entity<UserRole>(entity =>
-        {
+        modelBuilder.Entity<UserRole>(entity => {
             entity.HasKey(e => e.RoleId).HasName("PK__UserRole__760965CCCF7ADE2D");
 
             entity.Property(e => e.RoleId).HasColumnName("role_id");

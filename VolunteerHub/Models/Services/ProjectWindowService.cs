@@ -2,14 +2,14 @@
 using Avalonia.Layout;
 using ReactiveUI;
 using System;
-using System.Reactive.Linq;
-using System.Reactive;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace VolunteerHub.Models.Services {
     public interface IProjectWindowService {
-    IObservable<Project> OpenProjectWindow();
-}
+        IObservable<Project> OpenProjectWindow();
+    }
     public class ProjectWindowService : IProjectWindowService {
         private readonly IMainWindowProvider _windowProvider;
 
@@ -171,7 +171,7 @@ namespace VolunteerHub.Models.Services {
             var startTime = _startTimePicker.SelectedTime ?? TimeSpan.Zero;
             var endDate = _endDatePicker.SelectedDate ?? DateTime.MinValue;
             var endTime = _endTimePicker.SelectedTime ?? TimeSpan.Zero;
-            
+
             // Создание объекта Project
             return new Project {
                 ProjectName = projectName,

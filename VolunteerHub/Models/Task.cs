@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace VolunteerHub.Models;
 
-public partial class Task
-{
+public partial class Task {
     public int TaskId { get; set; }
 
     public int ProjectId { get; set; }

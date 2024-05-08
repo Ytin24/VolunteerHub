@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace VolunteerHub.Models;
 
-public partial class ProjectParticipation
-{
+public partial class ProjectParticipation {
     public int ParticipationId { get; set; }
 
     public int UserId { get; set; }

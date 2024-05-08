@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace VolunteerHub.Models;
 
-public partial class ProjectStatus
-{
+public partial class ProjectStatus {
     public int StatusId { get; set; }
 
     public string StatusName { get; set; } = null!;

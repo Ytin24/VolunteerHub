@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections;
-using Avalonia.Data.Converters;
+﻿using Avalonia.Data.Converters;
+using System;
 namespace VolunteerHub.Models.Converters {
     public class ProjectIsNullConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            if(value is Project) {
+            if (value is Project) {
                 return (value as Project) != null;
             }
             else return value != null;

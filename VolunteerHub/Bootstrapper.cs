@@ -5,11 +5,9 @@ using VolunteerHub.ViewModels;
 
 namespace VolunteerHub;
 
-public static class Bootstrapper
-{
-    public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
-    {
-        
+public static class Bootstrapper {
+    public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver) {
+
         services.RegisterLazySingleton<UserService>(() => new UserService());
         services.RegisterLazySingleton<RoutingState>(() => new RoutingState());
         services.RegisterLazySingleton<IMainWindowProvider>(() => new MainWindowProvider());
@@ -20,8 +18,7 @@ public static class Bootstrapper
         RegisterConst(services, resolver);
 
     }
-    private static void RegisterConst(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
-    {
+    private static void RegisterConst(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver) {
         services.RegisterConstant<IMutableDependencyResolver>(services);
 
         services.RegisterConstant(new MainViewModel(
@@ -34,10 +31,9 @@ public static class Bootstrapper
             resolver.GetRequiredService<AdminHubViewModel>(),
             resolver.GetRequiredService<VolunteerHubViewModel>()
             ));
-       
+
     }
-    private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
-    {
+    private static void RegisterCommonViewModels(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver) {
         services.RegisterLazySingleton(() => new AdminHubViewModel(
             resolver.GetRequiredService<IScreen>(),
             resolver.GetRequiredService<UserService>(),
@@ -47,7 +43,7 @@ public static class Bootstrapper
             resolver.GetRequiredService<IScreen>(),
             resolver.GetRequiredService<UserService>()
             ));
-        
-       
+
+
     }
 }

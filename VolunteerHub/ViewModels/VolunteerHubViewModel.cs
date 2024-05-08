@@ -1,11 +1,7 @@
-﻿using Avalonia.Controls;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VolunteerHub.Db;
 using VolunteerHub.Models;
 using VolunteerHub.Models.Services;
@@ -19,10 +15,10 @@ namespace VolunteerHub.ViewModels {
 
         public VolunteerHubViewModel(IScreen screen, UserService us) : base(screen) {
             _userService = us;
-            Projects = new VolunteerDbContext().Projects.Include(s=>s.Statuses).ToList();
+            Projects = new VolunteerDbContext().Projects.Include(s => s.Statuses).ToList();
         }
         public List<Project> Projects { get; set; }
 
-        
+
     }
 }

@@ -1,13 +1,10 @@
-﻿using Avalonia.Logging;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System;
 
 namespace VolunteerHub.ViewModels;
 
-public class ViewModelBase : ReactiveObject, IRoutableViewModel 
-{
-    public ViewModelBase(IScreen screen) 
-    { 
+public class ViewModelBase : ReactiveObject, IRoutableViewModel {
+    public ViewModelBase(IScreen screen) {
         HostScreen = screen;
     }
     public string? UrlPathSegment => Guid.NewGuid().ToString();
