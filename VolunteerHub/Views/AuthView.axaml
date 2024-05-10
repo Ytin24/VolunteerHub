@@ -20,6 +20,8 @@
 			</Button>
 		</Grid>
 		<Button Command="{Binding LoginAccount}" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">Войти</Button>
+		<Button Command="{Binding GoToRegisterAccount}" HorizontalContentAlignment="Center" HorizontalAlignment="Stretch">Нету аккаунта?</Button>
+
 	</StackPanel>
 	<UserControl.Styles>
 		<Style Selector="Button.ViewPasswordEye:pressed materialIcons|MaterialIcon">

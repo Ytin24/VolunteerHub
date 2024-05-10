@@ -16,10 +16,15 @@ public class AuthViewModel : ViewModelBase {
     public string Login { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public ReactiveCommand<Unit, Unit> LoginAccount { get; set; }
+    public ReactiveCommand<Unit, Unit> GoToRegisterAccount { get; set; }
+
     public UserService _userService { get; private set; }
     public AuthViewModel(IScreen screen, UserService us,
         AdminHubViewModel admin,
-        VolunteerHubViewModel volunteer) : base(screen) {
+        VolunteerHubViewModel volunteer,
+        RegistrationViewModel registration) : base(screen) {
+
+
         _userService = us;
         LoginAccount = ReactiveCommand.Create(() => {
             var user = db.Users.Include(x => x.Role).FirstOrDefault(x => x.Email == Login && x.PasswordHash == Password);
@@ -34,6 +39,9 @@ public class AuthViewModel : ViewModelBase {
             else {
                 HostScreen.Router.NavigateAndReset.Execute(volunteer);
             }
+        });
+        GoToRegisterAccount = ReactiveCommand.Create(() => {
+            HostScreen.Router.NavigateAndReset.Execute(registration);
         });
     }
     public async Task<int> LoginAccountTask() {

@@ -24,12 +24,17 @@ public static class Bootstrapper {
         services.RegisterConstant(new MainViewModel(
            resolver.GetRequiredService<IMutableDependencyResolver>()
            ));
-
+        services.RegisterConstant(new RegistrationViewModel(
+            resolver.GetRequiredService<IScreen>(),
+            resolver.GetRequiredService<UserService>(),
+            resolver.GetRequiredService<VolunteerHubViewModel>()
+            ));
         services.RegisterConstant(new AuthViewModel(
             resolver.GetRequiredService<IScreen>(),
             resolver.GetRequiredService<UserService>(),
             resolver.GetRequiredService<AdminHubViewModel>(),
-            resolver.GetRequiredService<VolunteerHubViewModel>()
+            resolver.GetRequiredService<VolunteerHubViewModel>(),
+            resolver.GetRequiredService<RegistrationViewModel>()
             ));
 
     }

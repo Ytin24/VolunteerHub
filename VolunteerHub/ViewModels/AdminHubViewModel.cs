@@ -12,12 +12,12 @@ using VolunteerHub.Models.Services;
 namespace VolunteerHub.ViewModels {
     public class AdminHubViewModel : ViewModelBase {
         private readonly VolunteerDbContext _db = new();
-        private readonly IProjectWindowService _windowProvider;
+        private readonly IProjectWindowService _ProjectAddService;
         public UserService _userService { get; set; }
 
-        public AdminHubViewModel(IScreen screen, UserService us, IProjectWindowService windowProvider) : base(screen) {
+        public AdminHubViewModel(IScreen screen, UserService us, IProjectWindowService projectAddService) : base(screen) {
             _userService = us;
-            _windowProvider = windowProvider;
+            _ProjectAddService = projectAddService;
             LoadProjects();
 
             this.WhenAnyValue(x => x.SelectedProject)
@@ -53,7 +53,7 @@ namespace VolunteerHub.ViewModels {
                 () => { IsModePaneOpen = !IsModePaneOpen; });
 
             AddNewProject = ReactiveCommand.CreateFromTask(async () => {
-                var observableProject = _windowProvider.OpenProjectWindow().Subscribe(
+                var observableProject = _ProjectAddService.OpenProjectWindow().Subscribe(
                     onNext: project => {
                         try {
                             _db.Projects.Add(project);

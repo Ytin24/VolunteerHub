@@ -152,7 +152,7 @@ public partial class VolunteerDbContext : DbContext {
         modelBuilder.Entity<User>(entity => {
             entity.HasKey(e => e.UserId).HasName("PK__Users__B9BE370FBB642BE2");
 
-            entity.HasIndex(e => e.Email, "UQ__Users__AB6E6164079C299D").IsUnique();
+            entity.HasIndex(e => e.Username, "UQ__Users__AB6E6164079C299D").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Email)
