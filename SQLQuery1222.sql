@@ -1,28 +1,28 @@
--- Создание базы данных
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГЎГ Г§Г» Г¤Г Г­Г­Г»Гµ
 CREATE DATABASE VolunteerDB;
 GO
 
--- Использование базы данных VolunteerDB
+-- Г€Г±ГЇГ®Г«ГјГ§Г®ГўГ Г­ГЁГҐ ГЎГ Г§Г» Г¤Г Г­Г­Г»Гµ VolunteerDB
 USE VolunteerDB;
 GO
 
--- Создание таблицы "Роли пользователей"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "ГђГ®Г«ГЁ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГҐГ©"
 CREATE TABLE UserRoles (
     role_id INT PRIMARY KEY IDENTITY,
     role_name NVARCHAR(50) NOT NULL
 );
 
--- Создание таблицы "Пользователи"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "ГЏГ®Г«ГјГ§Г®ГўГ ГІГҐГ«ГЁ"
 CREATE TABLE Users (
     user_id INT PRIMARY KEY IDENTITY,
-    username NVARCHAR(50) NOT NULL,
-    email NVARCHAR(100) NOT NULL UNIQUE,
+    username NVARCHAR(50) NOT NULL UNIQUE,
+    email NVARCHAR(100),
     password_hash NVARCHAR(255) NOT NULL,
     role_id INT NOT NULL,
     FOREIGN KEY (role_id) REFERENCES UserRoles(role_id)
 );
 
--- Создание таблицы "Проекты"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "ГЏГ°Г®ГҐГЄГІГ»"
 CREATE TABLE Projects (
     project_id INT PRIMARY KEY IDENTITY,
     project_name NVARCHAR(100) NOT NULL,
@@ -31,14 +31,14 @@ CREATE TABLE Projects (
     end_date DATE
 );
 
--- Создание таблицы "Статусы проектов"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "Г‘ГІГ ГІГіГ±Г» ГЇГ°Г®ГҐГЄГІГ®Гў"
 CREATE TABLE ProjectStatus (
     status_id INT PRIMARY KEY IDENTITY,
     status_name NVARCHAR(50) NOT NULL
 );
 
 
--- Создание таблицы "Проекты и их статусы"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "ГЏГ°Г®ГҐГЄГІГ» ГЁ ГЁГµ Г±ГІГ ГІГіГ±Г»"
 CREATE TABLE ProjectProjectStatus (
     project_id INT NOT NULL,
     status_id INT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE ProjectProjectStatus (
     FOREIGN KEY (status_id) REFERENCES ProjectStatus(status_id)
 );
 
--- Создание таблицы "Задачи"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "Г‡Г Г¤Г Г·ГЁ"
 CREATE TABLE Tasks (
     task_id INT PRIMARY KEY IDENTITY,
     project_id INT NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE Tasks (
     FOREIGN KEY (assigned_to) REFERENCES Users(user_id)
 );
 
--- Создание таблицы "Участие в проектах"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "Г“Г·Г Г±ГІГЁГҐ Гў ГЇГ°Г®ГҐГЄГІГ Гµ"
 CREATE TABLE ProjectParticipation (
     participation_id INT PRIMARY KEY IDENTITY,
     user_id INT NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE ProjectParticipation (
     FOREIGN KEY (project_id) REFERENCES Projects(project_id)
 );
 
--- Создание таблицы "Отчеты"
+-- Г‘Г®Г§Г¤Г Г­ГЁГҐ ГІГ ГЎГ«ГЁГ¶Г» "ГЋГІГ·ГҐГІГ»"
 CREATE TABLE Reports (
     report_id INT PRIMARY KEY IDENTITY,
     task_id INT NOT NULL,
